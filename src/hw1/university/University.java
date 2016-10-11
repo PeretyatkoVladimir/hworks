@@ -1,5 +1,7 @@
 package hw1.university;
 
+import hw1.myArrayList.MyArrayList;
+
 import java.util.Arrays;
 
 /**
@@ -7,14 +9,20 @@ import java.util.Arrays;
  */
 public class University {
 
-    private static final int MAX_SIZE = 5;
+    private static University uniqueInstance;
 
     private String name;
-    private Group[] groups;
+    private MyArrayList groups;
 
-    public University(String name) {
-        this.name = name;
-        this.groups = new Group[MAX_SIZE];
+    public static synchronized University getInstance(){
+        if (uniqueInstance == null){
+            uniqueInstance = new University();
+        }
+        return uniqueInstance;
+    }
+
+    private University() {
+        this.groups = new MyArrayList();
     }
 
     public String getName() {
@@ -31,32 +39,23 @@ public class University {
             return false;
         }
 
-        for (int i = 0; i < groups.length; i++){
-            if (groups[i] == null) {
-                groups[i] = group;
-                return true;
-            }
-
-        }
-
-        return false;
+        return groups.add(group);
     }
 
     public boolean delGroup(Group group){
-        for (int i = 0; i < groups.length; i++){
-            if (groups[i].equals(group)) {
-                groups[i] = null;
-                return true;
-            }
+
+        if(group == null){
+            return false;
         }
-        return false;
+
+        return groups.remove(group);
     }
 
     @Override
     public String toString() {
         return "University{" +
                 "name='" + name + '\'' +
-                ", groups=" + Arrays.toString(groups) +
+                ", groups=" + Arrays.toString(groups.toArray()) +
                 '}';
     }
 }
