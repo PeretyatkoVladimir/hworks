@@ -1,5 +1,7 @@
 package hw1.university;
 
+import hw1.myArrayList.MyArrayList;
+
 import java.util.Arrays;
 
 /**
@@ -7,20 +9,18 @@ import java.util.Arrays;
  */
 public class Group {
 
-    private static final int MAX_GROUP_SIZE = 30;
-
     private String name;
     private String teacher;
-    private Student[] students;
+    public MyArrayList students;
 
     public Student[] getStudents() {
-        return students.clone();
+        return (Student[]) students.toArray();
     }
 
     public Group(String name, String teacher) {
         this.name = name;
         this.teacher = teacher;
-        this.students = new Student[MAX_GROUP_SIZE];
+        this.students = new MyArrayList();
     }
 
     public boolean addStudent(Student student){
@@ -28,25 +28,40 @@ public class Group {
         if(student == null){
             return false;
         }
-
-        for (int i = 0; i < students.length; i++){
-            if (students[i] == null) {
-                students[i] = student;
-                return true;
-            }
+        if(!students.contains(student)){
+            return students.add(student);
         }
-
         return false;
     }
 
     public boolean delStudent(Student student){
-        for (int i = 0; i < students.length; i++){
-            if (students[i].equals(student)) {
-                students[i] = null;
-                return true;
-            }
+
+        if(student == null){
+            return false;
         }
-        return false;
+
+        return students.remove(student);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Group group = (Group) o;
+
+        if (!name.equals(group.name)) return false;
+        if (!teacher.equals(group.teacher)) return false;
+        return students.equals(group.students);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + teacher.hashCode();
+        result = 31 * result + students.hashCode();
+        return result;
     }
 
     @Override
@@ -54,7 +69,8 @@ public class Group {
         return "Group{" +
                 "name='" + name + '\'' +
                 ", teacher='" + teacher + '\'' +
-                ", students=" + Arrays.toString(students) +
+                ", students=" + Arrays.toString(students.toArray()) +
                 '}';
     }
+
 }
