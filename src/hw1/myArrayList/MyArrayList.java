@@ -1,10 +1,7 @@
-package myArrayList;
+package hw1.myArrayList;
 
 import java.util.*;
 
-/**
- * Created by vperetyatko on 10.10.2016.
- */
 public class MyArrayList implements List {
 
     private static final int DEFAULT_CAPACITY = 10;
@@ -37,6 +34,28 @@ public class MyArrayList implements List {
             throw new IndexOutOfBoundsException("You are looser!");
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MyArrayList that = (MyArrayList) o;
+
+        if (size != that.size) return false;
+        return this.containsAll(new ArrayList(that)); //new ArrayList because i haven't iterator and without it, it is not work :(
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = size;
+        for (Object o : elementData){
+            result = 31 * result + o.hashCode();
+        }
+
+        return result;
+    }
 
     @Override
     public String toString() {
