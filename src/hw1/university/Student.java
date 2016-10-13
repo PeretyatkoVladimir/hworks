@@ -3,7 +3,7 @@ package hw1.university;
 /**
  * Created by valdess on 09.10.16.
  */
-public class Student {
+public class Student implements Comparable<Student> {
 
     private String name;
     private double averageMark;
@@ -53,5 +53,16 @@ public class Student {
 
     public void setAverageMark(double averageMark) {
         this.averageMark = averageMark;
+    }
+
+    @Override
+    public int compareTo(Student other) {
+
+        if (this.equals(other)){
+            return 0;
+        }
+
+        return name.compareTo(other.name);
+
     }
 }
