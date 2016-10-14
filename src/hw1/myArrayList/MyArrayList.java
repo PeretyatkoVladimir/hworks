@@ -64,7 +64,7 @@ public class MyArrayList implements List {
         MyArrayList that = (MyArrayList) o;
 
         if (size != that.size) return false;
-        return this.containsAll(new ArrayList(that)); //new ArrayList because i haven't iterator and without it, it is not work :(
+        return this.containsAll(that) && that.contains(this);
 
     }
 
