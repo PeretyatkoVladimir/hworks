@@ -3,6 +3,9 @@ package hw1.university;
 import hw1.myArrayList.MyArrayList;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by valdess on 09.10.16.
@@ -71,6 +74,19 @@ public class Group {
                 ", teacher='" + teacher + '\'' +
                 ", students=" + Arrays.toString(students.toArray()) +
                 '}';
+    }
+
+    public void sortByStudent(){
+        Collections.sort(students);
+    }
+
+    public void sortByAverageMark(){
+        Collections.sort(students, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                return (int)((o1.getAverageMark() - o2.getAverageMark()) * 1000);
+            }
+        });
     }
 
 }

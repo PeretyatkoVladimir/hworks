@@ -2,6 +2,9 @@ package hw1.myArrayList;
 
 import java.util.*;
 
+/**
+ * Created by vperetyatko on 10.10.2016.
+ */
 public class MyArrayList implements List {
 
     private static final int DEFAULT_CAPACITY = 10;
@@ -14,10 +17,28 @@ public class MyArrayList implements List {
         this.elementData = new Object[DEFAULT_CAPACITY];
     }
 
+    public MyArrayList(Object[] objects){
+
+        this.elementData = new Object[DEFAULT_CAPACITY];
+
+        for (int i = 0; i < objects.length; i++) {
+            this.add(objects[i]);
+        }
+
+    }
+
     public MyArrayList(int initialCapacity) {
         this.elementData = new Object[Math.max(initialCapacity, DEFAULT_CAPACITY)];
     }
 
+    public MyArrayList(Collection c) {
+
+        this.elementData = new Object[DEFAULT_CAPACITY];
+
+        for(Object o : c){
+            this.add(o);
+        }
+    }
 
     private void checkAndGrow(int newSize){
         if (elementData.length < newSize){
@@ -278,6 +299,95 @@ public class MyArrayList implements List {
         return true;
     }
 
+    private class Itr implements Iterator {
+        int cursor;       // index of next element to return
+        int lastRet = -1; // index of last element returned; -1 if no such
+        //int expectedModCount = modCount;
+
+        public boolean hasNext() {
+            return cursor != size;
+        }
+
+        @SuppressWarnings("unchecked")
+        public Object next() {
+            //checkForComodification();
+            int i = cursor;
+            if (i >= size)
+                throw new NoSuchElementException();
+            Object[] elementData = MyArrayList.this.elementData;
+            if (i >= elementData.length)
+                throw new ConcurrentModificationException();
+            cursor = i + 1;
+            return elementData[lastRet = i];
+        }
+
+        public void remove() {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+
+            try {
+                MyArrayList.this.remove(lastRet);
+                cursor = lastRet;
+                lastRet = -1;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+    }
+
+    private class ListItr extends Itr implements ListIterator {
+        ListItr(int index) {
+            super();
+            cursor = index;
+        }
+
+        public boolean hasPrevious() {
+            return cursor != 0;
+        }
+
+        public int nextIndex() {
+            return cursor;
+        }
+
+        public int previousIndex() {
+            return cursor - 1;
+        }
+
+        @SuppressWarnings("unchecked")
+        public Object previous() {
+            int i = cursor - 1;
+            if (i < 0)
+                throw new NoSuchElementException();
+            Object[] elementData = MyArrayList.this.elementData;
+            if (i >= elementData.length)
+                throw new ConcurrentModificationException();
+            cursor = i;
+            return elementData[lastRet = i];
+        }
+
+        public void set(Object e) {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+            try {
+                MyArrayList.this.set(lastRet, e);
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        public void add(Object e) {
+            try {
+                int i = cursor;
+                MyArrayList.this.add(i, e);
+                cursor = i + 1;
+                lastRet = -1;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
+
     @Override
     public Object[] toArray(Object[] a) {
         return new Object[0]; // TODO 1. I don't understand what is this :(
@@ -285,17 +395,17 @@ public class MyArrayList implements List {
 
     @Override
     public Iterator iterator() {
-        return null; // TODO 2. I don't understand what is this :(
+        return new Itr();
     }
 
     @Override
     public ListIterator listIterator() {
-        return null; // TODO 3. I don't understand what is this :(
+        return new ListItr(0);
     }
 
     @Override
     public ListIterator listIterator(int index) {
-        return null; // TODO 4. I don't understand what is this :(
+        return new ListItr(index);
     }
 
 
