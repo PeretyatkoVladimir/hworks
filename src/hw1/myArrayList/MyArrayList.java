@@ -21,8 +21,8 @@ public class MyArrayList implements List {
 
         this.elementData = new Object[DEFAULT_CAPACITY];
 
-        for (int i = 0; i < objects.length; i++) {
-            this.add(objects[i]);
+        for (Object object : objects) {
+            this.add(object);
         }
 
     }
@@ -39,6 +39,7 @@ public class MyArrayList implements List {
             this.add(o);
         }
     }
+
 
     private void checkAndGrow(int newSize){
         if (elementData.length < newSize){
@@ -64,7 +65,7 @@ public class MyArrayList implements List {
         MyArrayList that = (MyArrayList) o;
 
         if (size != that.size) return false;
-        return this.containsAll(that) && that.contains(this);
+        return this.containsAll(that) && that.containsAll(this);
 
     }
 
@@ -218,7 +219,7 @@ public class MyArrayList implements List {
     @Override
     public int indexOf(Object o) {
         for(int i = 0; i < size; i++){
-            if (o.equals(elementData[i])){
+            if (elementData[i].equals(o)){
                 return i;
             }
         }
@@ -256,7 +257,7 @@ public class MyArrayList implements List {
             return false;
         }
 
-        for (int i = 0; i < size;){
+        for (int i = 0; i < size; i++){
             if(! c.contains(elementData[i])){
                 remove(i);
             } else {
@@ -273,7 +274,7 @@ public class MyArrayList implements List {
             return false;
         }
 
-        for (int i = 0; i < size;){
+        for (int i = 0; i < size; i++){
             if(c.contains(elementData[i])){
                 remove(i);
             } else {
