@@ -2,12 +2,60 @@ package tests;
 
 import hw1.myArrayList.MyArrayList;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by valdess on 14.10.16.
  */
 public class RunTests {
+
+    private MyArrayList myArrayList;
+
+    @Before
+    public void init(){
+        myArrayList = new MyArrayList();
+        myArrayList.add("0");
+        myArrayList.add("1");
+        myArrayList.add("2");
+        myArrayList.add("3");
+        myArrayList.add("4");
+        myArrayList.add("5");
+        myArrayList.add("6");
+        myArrayList.add("7");
+        myArrayList.add("8");
+    }
+
+    @Test
+    public void test_remove_when_list_is_full(){
+        myArrayList.add("9");
+
+        myArrayList.remove(5);
+
+        assertEquals(9, myArrayList.size());
+        assertEquals("6", myArrayList.get(5));
+    }
+
+    @Test
+    public void test_insert_when_list_is_full(){
+
+        myArrayList.add(6, "5");
+
+        assertEquals(11, myArrayList.size());
+        assertEquals("5", myArrayList.get(6));
+    }
+    @Test
+    public void test_sublist_when_list_is_full(){
+
+        myArrayList.add("9");
+        List subList = myArrayList.subList(5, 9);
+
+        assertEquals(5, subList.size());
+    }
 
     @Test
     public void testMyArrayList_toArray(){
@@ -121,7 +169,7 @@ public class RunTests {
         String actualElement = (String) actual.set(3, "xxx");
 
         Assert.assertArrayEquals(expected.toArray(), actual.toArray());
-        Assert.assertEquals(expectedElement, actualElement);
+        assertEquals(expectedElement, actualElement);
 
     }
 
@@ -177,7 +225,7 @@ public class RunTests {
         int expected = 6;
         int actual = myAL.size();
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -189,7 +237,7 @@ public class RunTests {
         boolean expected = false;
         boolean actual = myAL.isEmpty();
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -224,7 +272,7 @@ public class RunTests {
         boolean expected = true;
         boolean actual = myAL.contains("cab");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -241,7 +289,7 @@ public class RunTests {
         int expected = 2;
         int actual = myAL.indexOf("cab");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -258,7 +306,7 @@ public class RunTests {
         int expected = 3;
         int actual = myAL.lastIndexOf("cab");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
