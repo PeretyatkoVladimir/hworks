@@ -28,12 +28,14 @@ public class MyArrayList implements List {
     }
 
     public MyArrayList(int initialCapacity) {
+//   todo     why do you limit user on init method?
         this.elementData = new Object[Math.max(initialCapacity, DEFAULT_CAPACITY)];
     }
 
     public MyArrayList(Collection c) {
-
+//        todo I think elementData.length should == c.size()
         this.elementData = new Object[DEFAULT_CAPACITY];
+
 
         for(Object o : c){
             this.add(o);
@@ -96,7 +98,7 @@ public class MyArrayList implements List {
 
     @Override
     public boolean contains(Object o) {
-
+// todo o could be null
         for (int i = 0; i < size; i++){
             if (o.equals(elementData[i])){
                 return true;
@@ -117,7 +119,7 @@ public class MyArrayList implements List {
 
     @Override
     public boolean add(Object o) {
-
+// todo think how to let null adding
         if (o == null) {
             return false;
         }
@@ -172,6 +174,7 @@ public class MyArrayList implements List {
 
     @Override
     public void clear() {
+//        todo make each cell == null
         elementData = new Object[DEFAULT_CAPACITY];
         size = 0;
     }
