@@ -1,13 +1,14 @@
 package hw1.university;
 
-import java.util.ArrayList;
-
 /**
  * Created by valdess on 09.10.16.
  */
 public class Main {
 
     public static void main(String[] args) {
+
+        String s = new String();
+        System.out.println(s);
 
         Student s1 = new ContractStudent("Petro", 3.5, 3);
         Student s2 = new ContractStudent("Ivan", 3.7, 3);

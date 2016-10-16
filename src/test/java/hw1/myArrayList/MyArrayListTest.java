@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -12,12 +14,13 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by valdess on 14.10.16.
  */
-public class RunTests {
+public class MyArrayListTest {
 
     private MyArrayList myArrayList;
 
     @Before
     public void init(){
+
         myArrayList = new MyArrayList();
         myArrayList.add("0");
         myArrayList.add("1");
@@ -28,10 +31,12 @@ public class RunTests {
         myArrayList.add("6");
         myArrayList.add("7");
         myArrayList.add("8");
+
     }
 
     @Test
     public void test_remove_when_list_is_full(){
+
         myArrayList.add("9");
 
         myArrayList.remove(5);
@@ -43,18 +48,49 @@ public class RunTests {
     @Test
     public void test_insert_when_list_is_full(){
 
+        myArrayList.add(9);
         myArrayList.add(6, "5");
 
         assertEquals(11, myArrayList.size());
         assertEquals("5", myArrayList.get(6));
     }
+
     @Test
     public void test_sublist_when_list_is_full(){
 
         myArrayList.add("9");
         List subList = myArrayList.subList(5, 9);
 
-        assertEquals(5, subList.size());
+        assertEquals(4, subList.size());
+
+    }
+
+    @Test
+    public void test_sublist_when_list_is_full_(){
+
+        myArrayList.add("9");
+        List subList = myArrayList.subList(5, 9);
+
+        assertEquals(4, subList.size());
+    }
+
+    @Test
+    public void test_sublist_when_list_is_full_ArrayList(){
+
+        ArrayList arrayList = new ArrayList();
+        arrayList.add("0");
+        arrayList.add("1");
+        arrayList.add("2");
+        arrayList.add("3");
+        arrayList.add("4");
+        arrayList.add("5");
+        arrayList.add("6");
+        arrayList.add("7");
+        arrayList.add("8");
+        arrayList.add("9");
+        List subList = arrayList.subList(5, 9);
+
+        assertEquals(4, subList.size());
     }
 
     @Test

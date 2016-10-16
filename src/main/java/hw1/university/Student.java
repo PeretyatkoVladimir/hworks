@@ -57,7 +57,7 @@ public class Student implements Comparable<Student> {
 
     @Override
     public int compareTo(Student other) {
-//  todo next operation will also return 0 if obj are equal, and will do it faster better check on null
+//todo + next operation will also return 0 if obj are equal, and will do it faster better check on null
       /*  if (this.equals(other)){
             return 0;
         }

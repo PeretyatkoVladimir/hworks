@@ -28,23 +28,23 @@ public class MyArrayList implements List {
     }
 
     public MyArrayList(int initialCapacity) {
-//   todo     why do you limit user on init method?
+//todo +/- why do you limit user on init method?
+// i think
         this.elementData = new Object[Math.max(initialCapacity, DEFAULT_CAPACITY)];
     }
 
     public MyArrayList(Collection c) {
-//        todo I think elementData.length should == c.size()
-        this.elementData = new Object[DEFAULT_CAPACITY];
+//todo + I think elementData.length should == c.size()
 
+        this.elementData = new Object[Math.max(DEFAULT_CAPACITY, c.size())];
 
         for(Object o : c){
             this.add(o);
         }
     }
 
-
     private void checkAndGrow(int newSize){
-        if (elementData.length < newSize){
+        if (elementData.length <= newSize){
             elementData = Arrays.copyOf(elementData, getNewCapacity());
         }
     }
@@ -98,10 +98,19 @@ public class MyArrayList implements List {
 
     @Override
     public boolean contains(Object o) {
-// todo o could be null
-        for (int i = 0; i < size; i++){
-            if (o.equals(elementData[i])){
-                return true;
+//todo + o could be null
+
+        if (o == null){
+            for (int i = 0; i < size; i++) {
+                if (o == elementData[i]) {
+                    return true;
+                }
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (o.equals(elementData[i])) {
+                    return true;
+                }
             }
         }
 
@@ -119,10 +128,7 @@ public class MyArrayList implements List {
 
     @Override
     public boolean add(Object o) {
-// todo think how to let null adding
-        if (o == null) {
-            return false;
-        }
+//todo + think how to let null adding
 
         checkAndGrow(size + 1);
         elementData[size++] = o;
@@ -174,8 +180,10 @@ public class MyArrayList implements List {
 
     @Override
     public void clear() {
-//        todo make each cell == null
-        elementData = new Object[DEFAULT_CAPACITY];
+//todo + make each cell == null
+        for (int i = 0; i < size; i++){
+            elementData[i] = null;
+        }
         size = 0;
     }
 
@@ -204,9 +212,9 @@ public class MyArrayList implements List {
         int newCapacity = size + 1;
         checkAndGrow(newCapacity);
 
-        System.arraycopy(this.elementData, index, this.elementData, index + 1, newCapacity - index);
+        System.arraycopy(this.elementData, index, this.elementData, index + 1, newCapacity - index -1);
         this.elementData[index] = element;
-        this.size = newCapacity;
+        this.size++;
     }
 
     @Override
@@ -214,7 +222,7 @@ public class MyArrayList implements List {
         checkRange(index);
         Object oldValue = elementData[index];
         elementData[index] = null;
-        System.arraycopy(elementData, index + 1, elementData, index, size - index);
+        System.arraycopy(elementData, index + 1, elementData, index, size - index - 1);
         size--;
         return oldValue;
     }
@@ -222,8 +230,14 @@ public class MyArrayList implements List {
     @Override
     public int indexOf(Object o) {
         for(int i = 0; i < size; i++){
-            if (elementData[i].equals(o)){
-                return i;
+            if (o == null){
+                if (elementData[i] == o) {
+                    return i;
+                }
+            } else {
+                if (elementData[i].equals(o)) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -249,6 +263,7 @@ public class MyArrayList implements List {
         int listCapacity = toIndex - fromIndex + 1;
         MyArrayList result = new MyArrayList(listCapacity);
         System.arraycopy(this.elementData, fromIndex, result.elementData, 0, listCapacity);
+        result.size = toIndex - fromIndex;
 
         return result;
     }
