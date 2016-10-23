@@ -28,9 +28,13 @@ public class MyArrayList implements List {
     }
 
     public MyArrayList(int initialCapacity) {
-//todo +/- why do you limit user on init method?
-// i think
-        this.elementData = new Object[Math.max(initialCapacity, DEFAULT_CAPACITY)];
+//todo + why do you limit user on init method?
+
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("Illegal Capacity: "+
+                    initialCapacity);
+        
+        this.elementData = new Object[initialCapacity];
     }
 
     public MyArrayList(Collection c) {
@@ -275,7 +279,7 @@ public class MyArrayList implements List {
             return false;
         }
 
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < size;){
             if(! c.contains(elementData[i])){
                 remove(i);
             } else {
@@ -292,7 +296,7 @@ public class MyArrayList implements List {
             return false;
         }
 
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < size;){
             if(c.contains(elementData[i])){
                 remove(i);
             } else {

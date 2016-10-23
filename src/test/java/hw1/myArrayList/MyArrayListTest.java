@@ -1,65 +1,82 @@
-package tests;
+package hw1.myArrayList;
 
-import hw1.myArrayList.MyArrayList;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+//import java.hw1.myArrayList.MyArrayList;
+
+import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by valdess on 14.10.16.
  */
 public class MyArrayListTest {
 
-    private MyArrayList myArrayList;
+    private List list;
+    private static List testDataReadOnly;
+
+    @BeforeClass
+    public static void initTestData(){
+
+        testDataReadOnly = new ArrayList();
+        testDataReadOnly.add("0");
+        testDataReadOnly.add("1");
+        testDataReadOnly.add("2");
+        testDataReadOnly.add("3");
+
+    }
+
+    @AfterClass
+    public static void clearTestData(){
+        testDataReadOnly = null;
+    }
 
     @Before
     public void init(){
 
-        myArrayList = new MyArrayList();
-        myArrayList.add("0");
-        myArrayList.add("1");
-        myArrayList.add("2");
-        myArrayList.add("3");
-        myArrayList.add("4");
-        myArrayList.add("5");
-        myArrayList.add("6");
-        myArrayList.add("7");
-        myArrayList.add("8");
+        list = new MyArrayList();
+        list.add("0");
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        list.add("5");
+        list.add("6");
+        list.add("7");
+        list.add("8");
 
     }
 
     @Test
     public void test_remove_when_list_is_full(){
 
-        myArrayList.add("9");
+        list.add("9");
 
-        myArrayList.remove(5);
+        list.remove(5);
 
-        assertEquals(9, myArrayList.size());
-        assertEquals("6", myArrayList.get(5));
+        assertEquals(9, list.size());
+        assertEquals("6", list.get(5));
     }
 
     @Test
     public void test_insert_when_list_is_full(){
 
-        myArrayList.add(9);
-        myArrayList.add(6, "5");
+        list.add(9);
+        list.add(6, "5");
 
-        assertEquals(11, myArrayList.size());
-        assertEquals("5", myArrayList.get(6));
+        assertEquals(11, list.size());
+        assertEquals("5", list.get(6));
     }
 
     @Test
     public void test_sublist_when_list_is_full(){
 
-        myArrayList.add("9");
-        List subList = myArrayList.subList(5, 9);
+        list.add("9");
+        List subList = list.subList(5, 9);
 
         assertEquals(4, subList.size());
 
@@ -68,330 +85,234 @@ public class MyArrayListTest {
     @Test
     public void test_sublist_when_list_is_full_(){
 
-        myArrayList.add("9");
-        List subList = myArrayList.subList(5, 9);
+        list.add("9");
+        List subList = list.subList(5, 9);
 
         assertEquals(4, subList.size());
     }
 
     @Test
-    public void test_sublist_when_list_is_full_ArrayList(){
+    public void testList_toArray(){
 
-        ArrayList arrayList = new ArrayList();
-        arrayList.add("0");
-        arrayList.add("1");
-        arrayList.add("2");
-        arrayList.add("3");
-        arrayList.add("4");
-        arrayList.add("5");
-        arrayList.add("6");
-        arrayList.add("7");
-        arrayList.add("8");
-        arrayList.add("9");
-        List subList = arrayList.subList(5, 9);
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "7", "8"};
+        Assert.assertArrayEquals(expected, list.toArray());
 
-        assertEquals(4, subList.size());
     }
 
     @Test
-    public void testMyArrayList_toArray(){
+    public void testList_add(){
 
-        String[] expected = {"cab", "abc", "cab", "cab", "bac", "bac"};
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
-        actual.add("cab");
-        actual.add("bac");
-        actual.add("bac");
+        list.add("9");
+        list.add("10");
 
-        Assert.assertArrayEquals(expected, actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
-    public void testMyArrayList_add(){
+    public void testList_add_null(){
 
-        String[] initExpected = {"cab", "abc", "cab", "cab", "bac", "bac"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "7", "8", null, null};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
-        actual.add("cab");
-        actual.add("bac");
-        actual.add("bac");
+        list.add(null);
+        list.add(null);
 
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
-    public void testMyArrayList_addIndex(){
+    public void testList_get(){
 
-        String[] initExpected = {"cab", "abc", "cab", "xxx", "bac", "bac"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "7", "8"};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
-        actual.add("bac");
-        actual.add("bac");
+        Assert.assertEquals("7", list.get(7));
+    }
 
-        actual.add(3, "xxx");
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testMyArrayList_get_exeption(){
 
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "7", "8"};
+
+        Assert.assertEquals("7", list.get(20));
     }
 
     @Test
-    public void testMyArrayList_addAll(){
+    public void testList_addIndex(){
 
-        String[] initExpected = {"cab", "abc", "cab", "cab", "bac", "bac"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"0", "1", "2", "X", "3", "4", "5", "6", "7", "8"};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
+        list.add(3, "X");
 
-        MyArrayList listForAdd = new MyArrayList();
-        listForAdd.add("cab");
-        listForAdd.add("bac");
-        listForAdd.add("bac");
-
-        actual.addAll(listForAdd);
-
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
-    public void testMyArrayList_addAllIndex(){
+    public void testList_addAll(){
 
-        String[] initExpected = {"cab", "abc", "cab", "bac", "bac", "dab"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "0", "1", "2", "3"};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("dab");
+        list.addAll(testDataReadOnly);
 
-        MyArrayList listForAdd = new MyArrayList();
-        listForAdd.add("cab");
-        listForAdd.add("bac");
-        listForAdd.add("bac");
-
-        actual.addAll(2, listForAdd);
-
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
-    public void testMyArrayList_set(){
+    public void testList_addAllIndex(){
 
-        String[] initExpected = {"cab", "abc", "cab", "xxx", "bac", "bac"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"0", "1", "2", "0", "1", "2", "3", "3", "4", "5", "6", "7", "8"};
 
-        String expectedElement = "bab";
+        list.addAll(3, testDataReadOnly);
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
-        actual.add("bab");
-        actual.add("bac");
-        actual.add("bac");
+        System.out.println(Arrays.toString(list.toArray()));
 
-        String actualElement = (String) actual.set(3, "xxx");
+        Assert.assertArrayEquals(expected, list.toArray());
+    }
 
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+    @Test
+    public void testList_set(){
+
+        String[] expected = {"0", "1", "2", "3", "X", "5", "6", "7", "8"};
+
+        String expectedElement = "4";
+        String actualElement = (String) list.set(4, "X");
+
+        Assert.assertArrayEquals(expected, list.toArray());
         assertEquals(expectedElement, actualElement);
 
     }
 
-    @Test
-    public void testMyArrayList_remove(){
-
-        String[] initExpected = {"cab", "abc", "cab", "cab", "bac"};
-        MyArrayList expected = new MyArrayList(initExpected);
-
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
-        actual.add("cab");
-        actual.add("bac");
-        actual.add("bac");
-
-        actual.remove("bac");
-
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testMyArrayList_set_Exeption(){
+        list.set(44, "X");
     }
 
     @Test
-    public void testMyArrayList_removeIndex(){
+    public void testList_remove(){
 
-        String[] initExpected = {"cab", "abc", "cab", "bac", "bac"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "8"};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
-        actual.add("cab");
-        actual.add("bac");
-        actual.add("bac");
+        list.remove("7");
 
-        actual.remove(2);
-
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
-    public void testMyArrayList_size(){
+    public void testList_removeIndex(){
 
-        MyArrayList myAL = new MyArrayList();
-        myAL.add("cab");
-        myAL.add("abc");
-        myAL.add("cab");
-        myAL.add("cab");
-        myAL.add("bac");
-        myAL.add("bac");
+        String[] expected = {"0", "1", "2", "3", "4", "5", "6", "8"};
 
-        int expected = 6;
-        int actual = myAL.size();
+        list.remove(7);
+
+        Assert.assertArrayEquals(expected, list.toArray());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testMyArrayList_removeIndex_exeption(){
+
+        list.remove(77);
+
+    }
+
+    @Test
+    public void testList_size(){
+
+        int expected = 9;
+        int actual = list.size();
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testMyArrayList_isEmpty(){
-
-        MyArrayList myAL = new MyArrayList();
-        myAL.add("cab");
+    public void testList_isEmpty(){
 
         boolean expected = false;
-        boolean actual = myAL.isEmpty();
+        boolean actual = list.isEmpty();
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testMyArrayList_clear(){
+    public void testList_clear(){
 
-        MyArrayList expected = new MyArrayList();
+        String[] expected = {};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("cab");
-        actual.add("abc");
-        actual.add("cab");
-        actual.add("cab");
-        actual.add("bac");
-        actual.add("bac");
+        list.clear();
 
-        actual.clear();
-
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
-    public void testMyArrayList_contains(){
-
-        MyArrayList myAL = new MyArrayList();
-        myAL.add("cab");
-        myAL.add("abc");
-        myAL.add("cab");
-        myAL.add("cab");
-        myAL.add("bac");
-        myAL.add("bac");
+    public void testList_contains(){
 
         boolean expected = true;
-        boolean actual = myAL.contains("cab");
+        boolean actual = list.contains("7");
+
+        assertEquals(expected, actual);
+
+        expected = false;
+        actual = list.contains("77");
+
+        assertEquals(expected, actual);
+
+        //null check
+        expected = false;
+        actual = list.contains(null);
+
+        assertEquals(expected, actual);
+
+        list.add(null);
+
+        expected = true;
+        actual = list.contains(null);
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testMyArrayList_indexOf(){
+    public void testList_indexOf(){
 
-        MyArrayList myAL = new MyArrayList();
-        myAL.add("dab");
-        myAL.add("abc");
-        myAL.add("cab");
-        myAL.add("cab");
-        myAL.add("bac");
-        myAL.add("bac");
+        int expected = 7;
+        int actual = list.indexOf("7");
 
-        int expected = 2;
-        int actual = myAL.indexOf("cab");
+        assertEquals(expected, actual);
+
+        expected = -1;
+        actual = list.indexOf("44");
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testMyArrayList_lastIndexOf(){
+    public void testList_lastIndexOf(){
 
-        MyArrayList myAL = new MyArrayList();
-        myAL.add("cab");
-        myAL.add("abc");
-        myAL.add("cab");
-        myAL.add("cab");
-        myAL.add("bac");
-        myAL.add("bac");
-
-        int expected = 3;
-        int actual = myAL.lastIndexOf("cab");
+        list.add("7");
+        int expected = 9;
+        int actual = list.lastIndexOf("7");
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testMyArrayList_retainAll(){
+    public void testList_retainAll(){
 
-        String[] initExpected = {"xxx", "aaa", "ccc"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"0", "1", "2", "3"};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("aab");
-        actual.add("xxx");
-        actual.add("cab");
-        actual.add("aaa");
-        actual.add("cab");
-        actual.add("ccc");
+        list.retainAll(testDataReadOnly);
 
-        MyArrayList listForRetain = new MyArrayList();
-        listForRetain.add("aaa");
-        listForRetain.add("ccc");
-        listForRetain.add("xxx");
+        System.out.println(Arrays.toString(list.toArray()));
 
-        actual.retainAll(listForRetain);
-
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
 
     @Test
-    public void testMyArrayList_removeAll(){
+    public void testList_removeAll(){
 
-        String[] initExpected = {"xxx", "aaa", "ccc"};
-        MyArrayList expected = new MyArrayList(initExpected);
+        String[] expected = {"4", "5", "6", "7", "8"};
 
-        MyArrayList actual = new MyArrayList();
-        actual.add("aab");
-        actual.add("xxx");
-        actual.add("cab");
-        actual.add("aaa");
-        actual.add("xab");
-        actual.add("ccc");
+        list.removeAll(testDataReadOnly);
 
-        MyArrayList listForRemove = new MyArrayList();
-        listForRemove.add("aab");
-        listForRemove.add("cab");
-        listForRemove.add("xab");
-
-        actual.removeAll(listForRemove);
-
-        Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+        Assert.assertArrayEquals(expected, list.toArray());
     }
-
 
 }
