@@ -8,8 +8,6 @@ import hw2.library.model.Reader;
  */
 public interface IDataBase {
 
-
-
     boolean addReader(Reader reader);
     boolean delReader(Reader reader);
     Reader getReaderByName(String name);

@@ -9,4 +9,6 @@ public abstract class PeriodicalIssue extends Issue {
 
     private int periodicalNumber;
 
+
+
 }

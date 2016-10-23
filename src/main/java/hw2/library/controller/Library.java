@@ -1,5 +1,6 @@
 package hw2.library.controller;
 
+import hw2.library.config.ApplicationContext;
 import hw2.library.db.IDataBase;
 import hw2.library.model.Issue;
 import hw2.library.model.Reader;
@@ -11,11 +12,7 @@ import java.util.ArrayList;
  */
 public class Library {
 
-    IDataBase db;
-
-    private ArrayList<Issue> books = new ArrayList<>();
-    private ArrayList<Reader> readers = new ArrayList<>();
-
+    ApplicationContext appContext = ApplicationContext.getInstance();
 
 
 }
