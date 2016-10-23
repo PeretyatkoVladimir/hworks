@@ -1,4 +1,4 @@
-package hw2.library;
+package hw2.library.model;
 
 /**
  * Created by valdess on 16.10.16.
