@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by valdess on 23.10.16.
  */
-public class JSONDB implements IDataBase {
+public class JsonDB implements IDataBase {
 
     private static IDataBase uniqueInstance;
 
@@ -21,7 +21,7 @@ public class JSONDB implements IDataBase {
     private ArrayList<Reader> readers;
     private ArrayList<Issue> books;
 
-    private JSONDB() {
+    private JsonDB() {
         this.readers = new ArrayList<>();
         this.books = new ArrayList<>();
     }
@@ -60,11 +60,11 @@ public class JSONDB implements IDataBase {
 
     private static boolean connectDB() {
 
-        uniqueInstance = gson.fromJson(readFileDB(), JSONDB.class);
+        uniqueInstance = gson.fromJson(readFileDB(), JsonDB.class);
 
         //first start app
         if (uniqueInstance == null) {
-            uniqueInstance = new JSONDB();
+            uniqueInstance = new JsonDB();
         }
         return true;
 
@@ -72,7 +72,7 @@ public class JSONDB implements IDataBase {
 
     private synchronized boolean save(){
 
-        return writeFileDB(gson.toJson(this, JSONDB.class));
+        return writeFileDB(gson.toJson(this, JsonDB.class));
 
     }
 

@@ -1,4 +1,4 @@
-package hw2.library.db;
+package hw2.library.dao;
 
 import hw2.library.config.ApplicationContext;
 
