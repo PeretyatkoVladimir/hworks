@@ -1,25 +1,30 @@
 package hw3.myLinkedList;
 
 
+import hw1.myArrayList.MyArrayList;
+
 import java.util.*;
 
 /**
  * Created by vperetyatko on 24.10.2016.
  */
-public class MyLinkedList implements List, Deque {
+public class MyLinkedList<E> implements List<E> {
 
     private int size;
-    private Node first;
-    private Node last;
+    private Node<E> first;
+    private Node<E> last;
 
-    private class Node{
+    private class Node<E>{
 
-        Node prev;
-        Object item;
-        Node next;
+        Node<E> prev;
+        E item;
+        Node<E> next;
 
+        public Node(E item){
+            this.item = item;
+        }
 
-        public Node(Node prev, Object item, Node next){
+        public Node(Node prev, E item, Node next){
             this.prev = prev;
             this.item = item;
             this.next = next;
@@ -27,19 +32,22 @@ public class MyLinkedList implements List, Deque {
 
     }
 
-    private void removeElement(Node node){
+    private void removeNode(Node<E> node){
 
         Node nextN = node.next;
         Node prevN = node.prev;
 
         if(node == this.first){
             this.first = nextN;
+            nextN.prev = null;
         } else if (node == this.last) {
             this.last = prevN;
+            prevN.next = null;
         } else {
             node.prev.next = node.next;
             node.next.prev = node.prev;
         }
+        size--;
     }
 
     private void checkRange(int index) {
@@ -47,7 +55,8 @@ public class MyLinkedList implements List, Deque {
             throw new IndexOutOfBoundsException("You are looser!");
     }
 
-    private Node node(int index){
+    private Node<E> node(int index) {
+
         checkRange(index);
 
         if(index <= size / 2){
@@ -59,6 +68,24 @@ public class MyLinkedList implements List, Deque {
             for (int i = size - 1; i > index; i--) x = x.prev;
             return x;
         }
+    }
+
+    private void insert(Node<E> target, Node<E> newNode) {
+        if (target == this.first) {
+            newNode.next = this.first;
+            this.first = newNode;
+            target.prev = newNode;
+        } else if(target == this.last){
+            newNode.next = last;
+            newNode.prev = last.prev;
+            last.prev.next = newNode;
+        } else {
+            newNode.next = target;
+            newNode.prev = target.prev;
+            target.prev.next = newNode;
+            target.prev = newNode;
+        }
+        size++;
     }
 
     @Override
@@ -89,11 +116,6 @@ public class MyLinkedList implements List, Deque {
     }
 
     @Override
-    public Iterator descendingIterator() {
-        return null;
-    }
-
-    @Override
     public Object[] toArray() {
 
         Object[] objects = new Object[this.size];
@@ -108,138 +130,9 @@ public class MyLinkedList implements List, Deque {
     }
 
     @Override
-    public void addFirst(Object o) {
-        if(size == 0){
-            Node element = new Node(null, o, null);
-            first = element;
-            last = element;
-        } else {
-            Node element = new Node(null, o, first);
-            first.prev = element;
-            first = element;
-        }
-        size++;
-    }
-
-    @Override
-    public void addLast(Object o) {
-        if(last == null){
-            Node element = new Node(null, o, null);
-            first = element;
-            last = element;
-        } else {
-            Node element = new Node(last, o, null);
-            last.next = element;
-            last = element;
-        }
-        size++;
-    }
-
-    @Override
-    public boolean offerFirst(Object o) {
-        return false;
-    }
-
-    @Override
-    public boolean offerLast(Object o) {
-        return false;
-    }
-
-    @Override
-    public Object removeFirst() {
-        return null;
-    }
-
-    @Override
-    public Object removeLast() {
-        return null;
-    }
-
-    @Override
-    public Object pollFirst() {
-        return null;
-    }
-
-    @Override
-    public Object pollLast() {
-        return null;
-    }
-
-    @Override
-    public Object getFirst() {
-        if (first == null){
-            throw new NoSuchElementException();
-        }
-        return first.item;
-    }
-
-    @Override
-    public Object getLast() {
-        if (last == null){
-            throw new NoSuchElementException();
-        }
-        return last.item;
-    }
-
-    @Override
-    public Object peekFirst() {
-        return null;
-    }
-
-    @Override
-    public Object peekLast() {
-        return null;
-    }
-
-    @Override
-    public boolean removeFirstOccurrence(Object o) {
-        return false;
-    }
-
-    @Override
-    public boolean removeLastOccurrence(Object o) {
-        return false;
-    }
-
-    @Override
-    public boolean add(Object o) {
+    public boolean add(E o) {
         addLast(o);
         return true;
-    }
-
-    @Override
-    public boolean offer(Object o) {
-        return false;
-    }
-
-    @Override
-    public Object remove() {
-        return null;
-    }
-
-    @Override
-    public Object poll() {
-        return null;
-    }
-
-    @Override
-    public Object element() {
-        return null;
-    }
-
-    @Override
-    public Object peek() {
-        return null;
-    }
-
-    @Override
-    public void push(Object o) {
-
-    }
-
-    @Override
-    public Object pop() {
-        return null;
     }
 
     @Override
@@ -247,8 +140,7 @@ public class MyLinkedList implements List, Deque {
         for (Node x = first; x != null;){
             if ((o != null && x.item.equals(o))
                         || (o == null && x.item == o)){
-                removeElement(x);
-                size--;
+                removeNode(x);
                 return true;
             }
             x = x.next;
@@ -257,16 +149,44 @@ public class MyLinkedList implements List, Deque {
     }
 
     @Override
-    public boolean addAll(Collection c) {
-        for (Object o : c){
+    public boolean addAll(Collection<? extends E> c) {
+        for (E o : c){
             add(o);
         }
         return true;
     }
 
     @Override
-    public boolean addAll(int index, Collection c) {
-        return false;
+    public boolean addAll(int index, Collection<? extends E> c) {
+
+        checkRange(index);
+
+        if (c.size() == 0){
+            return false;
+        }
+
+        Node newChainFirst = null;
+        Node newChainLast = null;
+
+        for (Object o : c){
+            if(newChainFirst == null){
+                newChainFirst = new Node(o);
+                newChainLast = newChainFirst;
+            } else {
+                newChainLast.next = new Node(newChainLast, o, null);
+                newChainLast = newChainLast.next;
+            }
+            size++;
+        }
+        Node nodeByIndex = node(index);
+
+        nodeByIndex.prev.next = newChainFirst;
+        newChainFirst.prev = nodeByIndex.prev;
+
+        nodeByIndex.prev = newChainLast;
+        newChainLast.next = nodeByIndex;
+
+        return true;
     }
 
     @Override
@@ -278,28 +198,38 @@ public class MyLinkedList implements List, Deque {
             x.prev = null;
             x = next;
         }
-        first = last = null;
+        first = null;
+        last = null;
         size = 0;
     }
 
     @Override
-    public Object get(int index) {
+    public E get(int index) {
         return node(index).item;
     }
 
     @Override
     public Object set(int index, Object element) {
-        return null;
+        checkRange(index);
+        Node node = node(index);
+        Object oldItem = node.item;
+        node.item = element;
+        return oldItem;
     }
 
     @Override
     public void add(int index, Object element) {
-
+        insert(node(index), new Node(element));
     }
 
     @Override
-    public Object remove(int index) {
-        return null;
+    public E remove(int index) {
+
+        checkRange(index);
+        Node<E> node = node(index);
+        E item = node.item;
+        removeNode(node);
+        return item;
     }
 
     @Override
@@ -342,29 +272,103 @@ public class MyLinkedList implements List, Deque {
 
     @Override
     public List subList(int fromIndex, int toIndex) {
-        return null;
+
+        if (fromIndex > toIndex) throw new ArrayIndexOutOfBoundsException();
+
+        MyLinkedList newList = new MyLinkedList();
+
+        newList.first = node(fromIndex);
+        newList.last = node(toIndex);
+        newList.size = toIndex - fromIndex;
+
+        return newList;
     }
 
     @Override
     public boolean retainAll(Collection c) {
-        return false;
+        for (Node x = first; x != null; ) {
+            if (! c.contains(x.item)) {
+                Node forDel = x;
+                x = x.next;
+                removeNode(forDel);
+            } else {
+                x = x.next;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection c) {
-        for (Object o : c){
-            remove(o);
+        for (Node x = first; x != null; ) {
+            if (c.contains(x.item)) {
+                Node forDel = x;
+                x = x.next;
+                removeNode(forDel);
+            } else {
+                x = x.next;
+            }
         }
         return true;
     }
 
     @Override
     public boolean containsAll(Collection c) {
-        return false;
+        for (Object o : c){
+            if(! contains(o)){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public Object[] toArray(Object[] a) {
         return new Object[0];
     }
+
+    //Deque @Override
+    public void addFirst(Object o) {
+        if(size == 0){
+            Node element = new Node(null, o, null);
+            first = element;
+            last = element;
+        } else {
+            Node element = new Node(null, o, first);
+            first.prev = element;
+            first = element;
+        }
+        size++;
+    }
+
+    //Deque @Override
+    public void addLast(Object o) {
+        if(last == null){
+            Node element = new Node(null, o, null);
+            first = element;
+            last = element;
+        } else {
+            Node element = new Node(last, o, null);
+            last.next = element;
+            last = element;
+        }
+        size++;
+    }
+
+    //Deque @Override
+    public Object getFirst() {
+        if (first == null){
+            throw new NoSuchElementException();
+        }
+        return first.item;
+    }
+
+    //Deque @Override
+    public Object getLast() {
+        if (last == null){
+            throw new NoSuchElementException();
+        }
+        return last.item;
+    }
+
 }
