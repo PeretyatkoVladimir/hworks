@@ -112,7 +112,7 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public Iterator iterator() {
-        return null;
+        return null; // TODO 1.
     }
 
     @Override
@@ -262,12 +262,12 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public ListIterator listIterator() {
-        return null;
+        return null; // TODO 2.
     }
 
     @Override
     public ListIterator listIterator(int index) {
-        return null;
+        return null; // TODO 3.
     }
 
     @Override
