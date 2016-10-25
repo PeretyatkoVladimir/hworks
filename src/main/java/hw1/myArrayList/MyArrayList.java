@@ -28,19 +28,17 @@ public class MyArrayList implements List {
     }
 
     public MyArrayList(int initialCapacity) {
-//todo + why do you limit user on init method?
-
+        
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal Capacity: "+
                     initialCapacity);
-        
+
         this.elementData = new Object[initialCapacity];
     }
 
     public MyArrayList(Collection c) {
-//todo + I think elementData.length should == c.size()
-
-        this.elementData = new Object[Math.max(DEFAULT_CAPACITY, c.size())];
+        
+        this.elementData = new Object[c.size()];
 
         for(Object o : c){
             this.add(o);
@@ -102,8 +100,7 @@ public class MyArrayList implements List {
 
     @Override
     public boolean contains(Object o) {
-//todo + o could be null
-
+        
         if (o == null){
             for (int i = 0; i < size; i++) {
                 if (o == elementData[i]) {
@@ -132,8 +129,7 @@ public class MyArrayList implements List {
 
     @Override
     public boolean add(Object o) {
-//todo + think how to let null adding
-
+        
         checkAndGrow(size + 1);
         elementData[size++] = o;
 
@@ -184,7 +180,6 @@ public class MyArrayList implements List {
 
     @Override
     public void clear() {
-//todo + make each cell == null
         for (int i = 0; i < size; i++){
             elementData[i] = null;
         }
@@ -325,7 +320,6 @@ public class MyArrayList implements List {
     private class Itr implements Iterator {
         int cursor;       // index of next element to return
         int lastRet = -1; // index of last element returned; -1 if no such
-        //int expectedModCount = modCount;
 
         public boolean hasNext() {
             return cursor != size;
