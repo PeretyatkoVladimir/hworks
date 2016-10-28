@@ -2,78 +2,31 @@ package hw2.library.db;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import hw2.library.model.Book;
 import hw2.library.model.Issue;
 import hw2.library.model.Reader;
+import hw2.library.utils.FileUtils;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by valdess on 23.10.16.
  */
 public class JsonDB implements IDataBase {
 
+    private static final String DB_DIR = ".//src/main/java/hw2/library/db/library.db";
+
     private static IDataBase uniqueInstance;
 
     private static Gson gson = new GsonBuilder().create();
 
     private ArrayList<Reader> readers;
-    private ArrayList<Issue> books;
+    private ArrayList<Book> issues;
 
     private JsonDB() {
         this.readers = new ArrayList<>();
-        this.books = new ArrayList<>();
-    }
-
-    private static String readFileDB(){
-        byte[] buf = new byte[0];
-        RandomAccessFile f = null;
-
-        try {
-            f = new RandomAccessFile("/home/valdess/Develop/source/artcode/w1/hworks/src/main/java/hw2/library/db/library.db", "r");
-            buf = new byte[(int) f.length()];
-            f.read(buf);
-            f.close();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-
-        return new String(buf);
-    }
-
-    private static boolean writeFileDB(String json){
-
-        RandomAccessFile f = null;
-
-        try {
-            f = new RandomAccessFile("/home/valdess/Develop/source/artcode/w1/hworks/src/main/java/hw2/library/db/library.db", "rw");
-            f.write(json.getBytes());
-            f.close();
-            return true;
-        } catch (IOException e){
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-    private static boolean connectDB() {
-
-        uniqueInstance = gson.fromJson(readFileDB(), JsonDB.class);
-
-        //first start app
-        if (uniqueInstance == null) {
-            uniqueInstance = new JsonDB();
-        }
-        return true;
-
-    }
-
-    private synchronized boolean save(){
-
-        return writeFileDB(gson.toJson(this, JsonDB.class));
-
+        this.issues = new ArrayList<>();
     }
 
     public static synchronized IDataBase getInstance() {
@@ -84,6 +37,23 @@ public class JsonDB implements IDataBase {
         }
         return null;
     }
+
+    private static boolean connectDB() {
+
+        uniqueInstance = gson.fromJson(FileUtils.readFromFile(DB_DIR), JsonDB.class);
+
+        //first start app
+        if (uniqueInstance == null) {
+            uniqueInstance = new JsonDB();
+        }
+        return true;
+
+    }
+
+    public synchronized boolean save(){
+        return FileUtils.saveToFile(DB_DIR, gson.toJson(this, JsonDB.class));
+    }
+
 
     @Override
     public boolean addReader(Reader reader) {
@@ -115,6 +85,11 @@ public class JsonDB implements IDataBase {
 
     @Override
     public Reader getReaderByName(String name) {
+        for(Reader r : readers){
+            if (r.getName().equals(name)) {
+                return r;
+            }
+        }
         return null;
     }
 
@@ -124,12 +99,37 @@ public class JsonDB implements IDataBase {
     }
 
     @Override
+    public List<Book> getAllIssues() {
+        return issues;
+    }
+
+    @Override
+    public List<Reader> getAllReaders() {
+        return readers;
+    }
+
+    @Override
     public boolean addIssue(Issue issue) {
+        if (issues.add((Book) issue)) {
+            if (save()){
+                return true;
+            } else {
+                issues.remove(issue);
+            }
+        }
         return false;
     }
 
     @Override
     public boolean delIssue(Issue issue) {
+
+        if (issues.remove(issue)) {
+            if (save()){
+                return true;
+            } else {
+                issues.add((Book) issue);
+            }
+        }
         return false;
     }
 
@@ -142,4 +142,5 @@ public class JsonDB implements IDataBase {
     public Issue getIssue(Issue issue) {
         return null;
     }
+
 }
