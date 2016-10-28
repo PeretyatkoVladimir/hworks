@@ -12,8 +12,6 @@ public class ApplicationContext {
 
     public final static IDataBase DATA_BASE = JsonDB.getInstance();
     public final static ReaderDao READER_DAO = ReaderDao.getInstance();
-    public final static IssueDao ISSUE_DAO = new IssueDao();
+    public final static IssueDao ISSUE_DAO = IssueDao.getInstance();
 
-    private ApplicationContext() {
-    }
 }
