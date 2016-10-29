@@ -30,7 +30,7 @@ public class ReaderDao {
     public void create(String name)throws ReaderAlreadyExistException {
 
         if (db.getReaderByName(name) != null){
-            throw new ReaderAlreadyExistException("Test");
+            throw new ReaderAlreadyExistException();
         }
 
         db.addReader(new Reader(name));
