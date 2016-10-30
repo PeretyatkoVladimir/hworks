@@ -1,10 +1,7 @@
 package hw3.myLinkedList;
 
 
-import hw1.myArrayList.MyArrayList;
-
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Created by vperetyatko on 24.10.2016.
@@ -21,6 +18,10 @@ public class MyLinkedList<E> implements List<E> {
         private E item;
         private Node<E> next;
 
+
+        public Node() {
+        }
+
         public Node(E item){
             this.item = item;
         }
@@ -33,16 +34,24 @@ public class MyLinkedList<E> implements List<E> {
 
     }
 
-    private class myListIterator implements Iterator<E> {
+    private class MyListIterator implements Iterator<E> {
+
+        Node<E> currentPosition;
+
+        public MyListIterator() {
+            currentPosition = new Node<E>();
+            currentPosition.next = first;
+        }
 
         @Override
         public boolean hasNext() {
-            return false;
+            return currentPosition.next != null;
         }
 
         @Override
         public E next() {
-            return null;
+            currentPosition = currentPosition.next;
+            return currentPosition.item;
         }
     }
 
@@ -61,6 +70,11 @@ public class MyLinkedList<E> implements List<E> {
             node.prev.next = node.next;
             node.next.prev = node.prev;
         }
+
+        node.prev = null;
+        node.item = null;
+        node.next = null;
+
         size--;
     }
 
@@ -125,8 +139,10 @@ public class MyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public java.util.Iterator<E> iterator() {
-        return null;// TODO 1.
+    public Iterator<E> iterator() {
+
+        return new MyListIterator();
+
     }
 
     @Override

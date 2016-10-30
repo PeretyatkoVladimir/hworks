@@ -7,6 +7,7 @@ import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -16,7 +17,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class MyLinkedListTest {
 
-    private List list;
+    private List<String> list;
     private static List testDataReadOnly;
 
     @BeforeClass
@@ -65,7 +66,7 @@ public class MyLinkedListTest {
     @Test
     public void test_insert_when_list_is_full(){
 
-        list.add(9);
+        list.add("9");
         list.add(6, "5");
 
         assertEquals(11, list.size());
@@ -315,6 +316,30 @@ public class MyLinkedListTest {
         list.removeAll(testDataReadOnly);
 
         Assert.assertArrayEquals(expected, list.toArray());
+    }
+
+    @Test
+    public void testListIterator(){
+
+        Iterator<String> iterator = list.iterator();
+
+        Assert.assertSame(list.get(0), iterator.next());
+        Assert.assertSame(list.get(1), iterator.next());
+        Assert.assertSame(list.get(2), iterator.next());
+        Assert.assertSame(list.get(3), iterator.next());
+
+    }
+
+    @Test
+    public void testListIteratorWhenEmpty(){
+
+        list = new MyLinkedList<>();
+
+        Iterator<String> iterator = list.iterator();
+
+        Assert.assertFalse(iterator.hasNext());
+
+
     }
 
 }
