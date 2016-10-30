@@ -1,9 +1,8 @@
 package hw3.myLinkedList;
 
 
-import hw1.myArrayList.MyArrayList;
-
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by vperetyatko on 24.10.2016.
@@ -14,11 +13,11 @@ public class MyLinkedList<E> implements List<E> {
     private Node<E> first;
     private Node<E> last;
 
-    private class Node<E>{
+    private static class Node<E>{
 
-        Node<E> prev;
-        E item;
-        Node<E> next;
+        private Node<E> prev;
+        private E item;
+        private Node<E> next;
 
         public Node(E item){
             this.item = item;
@@ -30,6 +29,24 @@ public class MyLinkedList<E> implements List<E> {
             this.next = next;
         }
 
+    }
+
+    private class Iterator implements Iterable{
+
+        @Override
+        public java.util.Iterator iterator() {
+            return null;
+        }
+
+        @Override
+        public void forEach(Consumer consumer) {
+
+        }
+
+        @Override
+        public Spliterator spliterator() {
+            return null;
+        }
     }
 
     private void removeNode(Node<E> node){
@@ -111,8 +128,8 @@ public class MyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public Iterator iterator() {
-        return null; // TODO 1.
+    public java.util.Iterator<E> iterator() {
+        return null;// TODO 1.
     }
 
     @Override
