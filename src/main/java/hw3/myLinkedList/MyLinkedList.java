@@ -33,20 +33,15 @@ public class MyLinkedList<E> implements List<E> {
 
     }
 
-    private class Iterator implements Iterable{
+    private class myListIterator implements Iterator<E> {
 
         @Override
-        public java.util.Iterator iterator() {
-            return null;
+        public boolean hasNext() {
+            return false;
         }
 
         @Override
-        public void forEach(Consumer consumer) {
-
-        }
-
-        @Override
-        public Spliterator spliterator() {
+        public E next() {
             return null;
         }
     }
