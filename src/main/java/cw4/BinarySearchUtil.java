@@ -88,7 +88,6 @@ public class BinarySearchUtil {
                 end = midle;
                 midle = getMiddle(start, end);
             }
-
             if (start == midle){
                 return compare(searchValue, l.get(end-1), comparator) == 0;
             }
