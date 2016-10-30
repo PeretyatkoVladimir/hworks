@@ -1,6 +1,8 @@
 package hw3.myLinkedList;
 
 
+import hw1.myArrayList.MyArrayList;
+
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -197,6 +199,7 @@ public class MyLinkedList<E> implements List<E> {
         }
         Node<E> nodeByIndex = node(index);
 
+
         nodeByIndex.prev.next = newChainFirst;
         newChainFirst.prev = nodeByIndex.prev;
 
@@ -366,6 +369,7 @@ public class MyLinkedList<E> implements List<E> {
             last = element;
         } else {
             Node element = new Node<E>(last, o, null);
+
             last.next = element;
             last = element;
         }
@@ -374,6 +378,7 @@ public class MyLinkedList<E> implements List<E> {
 
     //Deque @Override
     public E getFirst() {
+
         if (first == null){
             throw new NoSuchElementException();
         }
